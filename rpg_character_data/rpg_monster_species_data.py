@@ -1,115 +1,178 @@
 # rpg_monster_species_data.py
+#
+# === category フィールドについて ===
+# 各種族に body archetype を付与し、Rank プロンプト（Boss/Legendary 等）が
+# カテゴリに応じた表現を選べるようにする。
+#
+# カテゴリ一覧（14種、サイズ × 体型 × 表面の組み合わせ）:
+#   humanoid_small      - 小型ヒューマノイド (Goblin / Kobold / Ghoul / Harpy)
+#   humanoid_large      - 大型ヒューマノイド (Skeleton / Orc / Ogre / Vampire / Demon / Lich / Flesh Golem / Medusa)
+#   quadruped_small     - 小型四足獣 (Rat)
+#   quadruped_large     - 大型四足獣 (Wolf / Cerberus)
+#   winged_mammal       - 翼付き哺乳類 (Bat)
+#   winged_reptilian    - 翼付き爬虫類/巨大獣 (Dragon / Manticore / Chimera)
+#   serpentine          - 多頭蛇/蛇身 (Hydra)
+#   arthropod           - 節足動物 (Spider)
+#   amphibian           - 両生類 (Frog)
+#   amorphous           - 不定形 (Slime)
+#   incorporeal         - 霊体・実体なし (Ghost / Wraith)
+#   construct_stone     - 石造構築物 (Gargoyle)
+#   construct_object    - 物体擬態 (Mimic)
+#   tubular             - 蠕虫体 (Giant Worm)
+#
+# 新種族追加時は適切なカテゴリを必ず指定すること。
+# Rank データ側で category に応じた個別プロンプトを定義している。
 
 MONSTER_SPECIES_DATA = {
     "Slime": {
+        "category": "amorphous",
         "prompt": "A plump teardrop-shaped mound of translucent viscous slime, {peaked dome shape slumped on floor|partially melted and spreading|pointed mounded heap}, {broad bottom spreading on the stone floor|wide spreading puddle}, {swirling surface patterns|trapped debris|internal nucleus}, glistening wet texture, directly on the dungeon floor",
-        "negative_prompt": "sphere, ball, orb, perfect circle, round object, symmetrical, floating, flying, suspended, air-borne, watery, thin liquid, pedestal, platform, humanoid, face, eyes, mouth, teeth, nose, head, limbs, arms, legs, hands, feet, claws, wings, tail, muscular, clothes, text, watermark"
+        "negative_prompt": "sphere, ball, orb, perfect circle, round object, symmetrical, floating, flying, suspended, air-borne, watery, thin liquid, pedestal, platform, humanoid, face, eyes, mouth, teeth, nose, head, limbs, arms, legs, hands, feet, claws, wings, tail, muscular, clothes, text, watermark",
+        "rank_overrides": {
+            "Boss": "(epic boss-tier colossal slime monster, dramatic centerpiece of the image:1.5), (massive bulging mound of translucent viscous slime filling the entire frame:1.4), (intense glowing nucleus pulsating inside the translucent body:1.4), bones, broken weapons, armor pieces, and victims clearly trapped and floating inside the gelatinous translucent body, swirling internal patterns of dark sinister colors, threatening swelling and pulsating shape, ominous wobbling presence, dripping slime tendrils oozing down, spreading wide across the dungeon floor, dramatic low-angle composition emphasizing the massive bulk, intense epic atmosphere",
+            "Legendary": "(legendary divine slime spirit, mythical primordial ooze:1.5), (radiant golden divine aura emanating from the entire translucent gelatinous body:1.4), (sacred glowing nucleus pulsating with otherworldly power deep inside the slime:1.4), {glowing golden runes floating suspended within the translucent slime body|sacred celestial markings visible inside the gelatinous form|cosmic constellation patterns suspended in the gel}, swirling magical particles and motes of light trapped inside the body, halo of divine light above the mound, masterwork ornate sacred relics trapped inside the slime, transcendent ethereal majesty, mythical legendary atmosphere"
+        }
     },
     "Skeleton": {
-        "prompt": "An animated skeletal warrior, {front view|three-quarter view|side profile}, {holding a longsword and a shield|holding a mace and a buckler|aiming with a bone bow and arrow|wielding a jagged spear|wielding a heavy axe|in a menacing predatory pose}, {rusted iron breastplate|shredded battle-torn banner|ancient necklaces of bone|shattered legionnaire armor|broken ribs exposed}, bleached bones, glowing hollow eye sockets",
-        "negative_prompt": "flesh, skin, muscle, fat, hair, living person, static pose"
+        "category": "humanoid_large",
+        "prompt": "(full body wide cinematic shot of the entire skeleton from skull all the way down to feet, complete figure visible at all times, feet planted on the ground at the bottom of the frame:1.6), (extreme dramatic foreground hero shot, towering skeleton figure filling 80 to 90 percent of the frame height, very close to the camera, dominant foreground subject:1.6), (an animated undead skeleton warrior in a combat-ready battle stance:1.5), (skeleton anatomy with bare skull, exposed rib cage, visible spine, bony arms and bony legs:1.4), {dynamic three-quarter angle view|striking side profile view|three-quarter view from a slightly low angle|cinematic three-quarter pose with one foot forward}, (combat-ready fighting stance:1.4), {battle-ready guard stance with weapon raised in front|aggressive low fighting crouch ready to lunge|weapon swung mid-attack in a powerful arc|defensive stance with weapon held high and shield up|menacing predator stance leaning slightly forward|two-handed weapon held diagonally ready to strike|weapon raised overhead about to slash|shield-bash forward charge stance}, glowing hollow eye sockets burning with menace in the bare skull, bony hands firmly gripping the weapon in a tight combat grip, knees slightly bent in a tense fighting posture, standing in an alert battle-ready stance on bony feet planted firmly on the ground, (foreground subject filling the central area of the image:1.4)",
+        "negative_prompt": "flesh on the body, exposed muscle tissue, skin covering bones, fat, hair, living person, static pose, standing idle pose, arms hanging loose, weapon held loosely at side, relaxed posture, slouching, hands empty, no weapon, dropped weapon, hooded reaper, grim reaper holding scythe, complete robe covering everything, no visible bones at all, death knight, dark fantasy knight, lich king, fully cloaked figure with no visible skeleton, waist-up shot, bust shot, knee-up shot, half body shot, cropped at the waist, cropped at the knees, head-only portrait, headshot, directly frontal mugshot, symmetrical centered front-facing portrait, feet not visible, legs cut off the frame, tiny figure in the distance, small distant figure, miniature skeleton in the background, far away skeleton, figure dwarfed by the environment, skeleton small in the frame, skeleton placed at the far end of corridor, skeleton in the vanishing point, statue of skeleton in a niche, decorative skeleton display, large empty floor in front of the figure, skeleton positioned at the back of the room, deep corridor extending behind, vast empty foreground, wide-angle shot dwarfing the subject, skeleton occupying less than 50 percent of the frame",
+        "rank_overrides": {
+            "Common": "(full body shot showing the entire skeleton from skull to feet:1.4), (basic skeleton foot soldier of the undead in a basic combat stance:1.3), (rib cage, spine, and all bones clearly visible with no armor:1.3), nearly bare bones with minimal equipment - {wielding a simple rusty shortsword raised in a basic guard|holding a chipped dagger ready to stab|carrying a weathered short spear pointed forward|gripping a basic curved blade in a fighting grip|holding a small rusty hatchet raised to strike}, (basic combat-ready stance with weapon held in front:1.3), no armor pieces, no helmet, no cape, no shield, just exposed bleached bones, simple leather strap or rope holding the weapon, knees slightly bent in a basic fighting posture, plain ordinary appearance, common dungeon-tier minion",
+            "Elite": "(full body shot of the entire skeleton from skull to feet:1.4), (elite battle-hardened skeleton veteran warrior, decorated dread soldier of the dead:1.5), (glowing cold blue or pale green eye sockets burning with menacing light:1.4), (wearing solid full iron veteran armor:1.5), {an iron skull helm with notched edges over the bare skull|a chainmail coif covering the skull|a hooded iron-rimmed cowl|a horned iron helm with battle damage|a battle-scarred bone-and-iron helmet}, (a sturdy iron breastplate over the rib cage with the rib bones visible through the gaps:1.4), (heavy iron shoulder pauldrons:1.4), (iron-plated gauntlets:1.4), (iron leg greaves and boots:1.4), (rib cage, spine, and bones still clearly visible between the iron armor pieces:1.3), wielding {a sturdy longsword raised in guard with a battle-scarred iron kite shield held forward|a heavy war axe ready to swing with a steel buckler raised|a spiked mace held threateningly with a round wooden shield with iron rim|a heavy war halberd held diagonally in both hands ready to strike|a stout spear pointed forward with a heater shield|a curved scimitar slashing in mid-arc with a metal-rimmed shield}, (alert confident veteran fighting stance, weapon ready in combat grip, knees bent in tense battle posture:1.4), (long flowing battle-worn cloak hanging dramatically from the shoulders:1.4), iron chains hanging from the belt, battle banner with faded sigil on a spike rising behind the figure, scars and chips marking the bones, dust motes and ash drifting in the air around the form, hardened intimidating veteran presence, intimidating decorated soldier of countless battles",
+            "Boss": "(epic boss-tier ancient skeleton overlord, terrifying dramatic centerpiece of the image:1.6), (heavily armed and heavily armored towering skeleton warlord wearing imposing boss-tier dark armor:1.5), {dynamic three-quarter angle pose|imposing side profile stance|striking action pose with one leg forward|dramatic low-angle view from below|dynamic battle stance}, (massive spiked shoulder pauldrons with skull motifs:1.4), (open segmented dark breastplate with the rib cage clearly visible through the gaps:1.5), (engraved blackened gauntlets with claw spikes:1.4), (carved leg greaves and dark iron sabatons on the bone feet:1.4), (rib cage, spine, arm bones, and leg bones still clearly visible through every armor gap:1.4), (intense glowing red eyes burning inside an ornate horned skull helmet or crown of bones above the head:1.4), wielding {a colossal jagged bone greatsword wreathed in dark fire raised overhead ready to slash|a massive war hammer with glowing red skull motifs swung in mid-attack|a giant ornate bone halberd of judgement held diagonally in both hands ready to strike|dual cursed swords in both hands crossed in a fierce attack pose|a heavy battle axe glowing with necrotic energy raised high|a flaming bone scepter pointed forward and a sword raised in challenge}, {holding a large gothic tower shield with skull emblem and protruding spikes raised forward:1.3|holding a dark imposing kite shield with glowing red runes held high:1.3|with both hands gripping a two-handed weapon ready to swing|dual-wielding two weapons in an aggressive menacing pose}, (imposing dominant battle stance with weapon raised threateningly, knees bent in a low aggressive predator stance:1.4), massive tattered dark royal cape flowing dramatically from the shoulders, heavy iron chains hanging across the chest, ancient bone trophies and skulls hanging from the belt, war banner with skull emblem rising behind the figure, debris of bones and dark embers floating in mid-air around the form, ground cracking under massive armored sabatons, supreme undead overlord, dominant alpha predator presence, terrifying epic dramatic atmosphere",
+            "Ancient": "(full body shot showing the entire ancient skeleton from skull to feet:1.4), (an ancient primordial skeleton from forgotten eras, undead from millennia ago:1.4), (yellowed weathered ancient bones with deep cracks and moss growth across the skeleton:1.3), entire body covered in centuries of dust, age-old moss creeping over the bones, dark patina and discoloration on the bone surface, hairline cracks running across rib cage and skull, faded ancient runes barely visible carved into the rib cage and arm bones, wearing fragments of decayed ancient armor - {tarnished verdigris-covered breastplate barely holding together|crumbling leather harness with rotted straps|broken legionnaire armor pieces from a lost civilization|fragments of bronzed ceremonial armor with patina}, (yellowed cracked bones still clearly visible, partially overgrown with moss and lichen:1.3), wielding {an ancient weathered sword with a chipped blade and pitted edges|a corroded antique spear with rotted shaft|a moss-covered bone staff with carved sigils|an ancient halberd with green patina|a forgotten relic axe of a dead empire}, wise primordial presence, traces of forgotten civilizations on the body, weathered hooded cloak ragged and tattered with millennia of age, dust motes floating around the form, eerie ancient sacred atmosphere, full body composition not cropped",
+            "Mutated": "(full body shot showing the entire mutated skeleton from skull to feet:1.4), (a mutated aberrant skeleton abomination, twisted undead horror:1.4), (deformed asymmetric skeletal anatomy with unnatural bone growths and protrusions:1.4), (entire body still made of bare bones with absolutely no flesh, but corrupted by mutation:1.4), disturbing skeletal aberrations - {extra skeletal arms growing from the back and shoulders|asymmetric extra rib cage on one side|twisted secondary skull face fused on the body|jagged bone spikes erupting from the spine and shoulders|crystalline bone growths protruding from joints|abnormal bone spurs covering the rib cage|fused twin skulls on a single neck}, twisted spine bent at wrong angles, mismatched limb lengths, bones cracked and reformed in chaotic patterns, pulsating necrotic dark aura around the form, sickly glowing green or purple eye sockets, partial corroded armor pieces dangling crookedly, wielding {a malformed jagged bone weapon with multiple cutting edges|a twisted dual-blade sword fused from bones|a corrupted bone staff topped with a screaming skull|an asymmetric battle axe formed of fused bones|a tendrilled bone whip}, all aberrations clearly made of bone not flesh, no flesh growths anywhere, unsettling wrong presence, eerie corrupted dark atmosphere, full body composition not cropped",
+            "Legendary": "(legendary divine bone godking, mythical undead deity, supreme overlord of death and divine judgement:1.6), (heavily clad in elaborate masterwork sacred golden armor with spiked filigree edges:1.5), {dynamic three-quarter divine pose|cinematic side profile of the deity|imposing slight angle view|striking dynamic regal stance with one leg forward|cinematic dramatic angle from a low viewpoint}, (massive ornate golden spiked shoulder pauldrons with celestial engravings and gemstones:1.5), (divine open breastplate of pure engraved gold with the rib cage glowing brightly visible through the panels:1.5), (sacred ornate golden gauntlets with glowing sigils:1.4), (divine ornate golden leg greaves and divine golden sabatons on the bone feet:1.5), (every bone of the skeleton covered in glowing golden runes:1.5), wielding {a colossal sacred legendary greatsword wreathed in golden divine flames raised in regal judgement|a divine golden two-handed war hammer radiating sun motifs swung in a heroic arc|a massive celestial halberd of divine judgement held diagonally in both hands ready to strike|dual sacred holy swords blazing with celestial light crossed in heroic guard|a holy greatsword raised high and a celestial scepter pointed forward in combat stance|a divine spear pointed forward and a sacred sword raised in regal challenge}, (holding a massive divine golden tower shield with sacred sigils blazing held forward in the other hand:1.4), (transcendent regal battle stance with the legendary weapon raised in divine authority, divine combat-ready posture:1.4), (radiant blinding golden divine aura blazing around the entire body:1.5), (multiple halos of divine power floating around the skull and shoulders:1.5), (massive billowing royal cape of gold and crimson flowing dramatically behind:1.5), (towering ornate crown of pure gold, twisted bones, and floating gemstones above the bare skull:1.5), (intense glowing eyes burning with cosmic divine power:1.4), heavy golden chains with skull trophies hanging from the belt, massive sacred war banner rising behind, swirling sacred magical particles surrounding the form, standing firmly on the cracked glowing ground with golden divine sabatons planted at the bottom of the frame, ground beneath cracked emanating golden light, transcendent divine undead majesty, far more powerful and ornate than any boss-tier monster, mythical legendary epic atmosphere"
+        }
     },
     "Orc": {
+        "category": "humanoid_large",
         "prompt": "A brutal muscular orc warrior with tusks, {front view|three-quarter view|side profile}, {roaring and lunging|heavy breathing stance|brandishing weapon|imposing warrior walk|bracing for impact in a low crouch}, {massive notched axe|heavy spiked club|dual-wielding cleavers|hand-and-a-half sword}, {crude tribal tattoos|fur-lined shoulder pad|heavy studded leather belt|bone trophies hanging from belt|furred mantle|scars across chest}, battle-scarred skin, heavy build",
         "negative_prompt": "animal, weak, thin, friendly gaze, static pose"
     },
     "Dragon": {
+        "category": "winged_reptilian",
         "prompt": "A colossal ancient dragon with massive leathery wings, {diving from the sky|soaring with speed|three-quarter ground stance}, {jagged reptilian scales|ancient battle scars|glowing chest preparing breath}, imposing and powerful presence",
         "negative_prompt": "humanoid, person, human, clothes, standing on two legs, arms, warrior, static pose"
     },
     "Bat": {
-        "prompt": "A {giant leathery-winged cave bat|swarm of small bats merging}, {clinging to ceiling upside down|screeching with wings spread|flying through dark mist}, sharp fangs, furred body",
-        "negative_prompt": "humanoid, person, legs, standing, bird, static pose"
+        "category": "winged_mammal",
+        "prompt": "(a giant cave bat, small flying mammal:1.5), (typical bat anatomy with small mouse-like head, large pointed ears, wide leathery membrane wings stretched between elongated finger bones:1.3), (small mammalian body covered in dense soft fur:1.3), {hanging upside down from a stone ceiling|in mid-flight with wings fully spread|swooping low toward the viewer|gliding through the air with wings outstretched|clinging to a cave wall with wings folded}, {front view|three-quarter view|side profile}, small sharp fangs, beady glowing eyes, small clawed feet, dense fur texture, NOT reptilian, NOT scaly",
+        "negative_prompt": "humanoid stance, bipedal pose, walking on two legs, standing upright, four-legged stance on rocks, muscular reptilian body, demon, devil, horned demon, demonic horns, gargoyle, dragon, dragon body, fire dragon, wyvern, drake, reptilian, scales, scaly skin, smooth skin, bird, feathers, beak, swarm of bats, multiple creatures merging, evil grinning face, large muscular humanoid body, manticore, chimera"
     },
     "Rat": {
-        "prompt": "A mutated {giant rat beast|pack of scurrying rats}, {hiding in shadows|gnawing on bones|scuttling on dungeon floor}, mangy fur, glowing red eyes, sharp claws",
-        "negative_prompt": "humanoid, person, standing, cute, pet, static pose"
+        "category": "quadruped_small",
+        "prompt": "(a giant cave rat, large four-legged rodent:1.5), (typical rat anatomy with elongated rodent snout, large front incisor teeth, round small ears, long thin scaly tail, whiskers:1.3), (small mammalian rodent body covered in mangy dirty fur:1.3), {hiding in dungeon shadows on four legs|gnawing on bones with rat teeth|scuttling on dungeon floor on four paws|sniffing the air with whiskers|scampering across stones on all fours}, {front view|three-quarter view|side profile}, glowing red beady eyes, sharp small claws on four paws, NOT humanoid, NOT bipedal",
+        "negative_prompt": "humanoid stance, bipedal pose, walking on two legs, standing upright, muscular humanoid body, werewolf, werecreature, lycanthrope, wolfman, ratman, anthropomorphic, person, demon, devil, horned demon, dragon, cute pet, swarm of rats, pack of rats, multiple creatures, mutated abomination, beast-man"
     },
     "Frog": {
-        "prompt": "A bloated toad-like monster, {preparing to leap|tongue lashed out|crouched on a mossy stone}, warty necrotic skin, predatory yellow eyes",
-        "negative_prompt": "humanoid, person, clothes, cute, small frog, static pose"
+        "category": "amphibian",
+        "prompt": "(a bloated giant toad monster, large amphibian:1.5), (typical toad anatomy with wide flat head, bulging eyes on top, wide gaping mouth, four short legs, webbed feet:1.3), (squat amphibian body with warty bumpy skin:1.3), {preparing to leap on four legs|tongue lashed out from mouth|crouched on a mossy stone on four legs|sitting wide and low|inflating throat sac}, {front view|three-quarter view|side profile}, warty necrotic skin, predatory yellow bulging eyes, sticky moist skin, NOT humanoid, NOT bipedal, NOT standing upright",
+        "negative_prompt": "humanoid stance, bipedal pose, walking on two legs, standing upright, person, clothes, cute small frog, anthropomorphic frog, frog-man, beast-man, demon, swarm of frogs"
     },
     "Spider": {
-        "prompt": "A massive venomous giant spider, {skittering on web|descending from silk thread|ambushing from shadows}, multiple glowing eyes, hairy chitinous legs",
-        "negative_prompt": "humanoid, person, face, two legs, arms, static pose"
+        "category": "arthropod",
+        "prompt": "(a massive venomous giant spider, eight-legged arachnid:1.5), (typical spider anatomy with rounded segmented body, eight long jointed legs, multiple eyes, fangs:1.3), (chitinous arachnid body with hairy bristled legs:1.3), {skittering on a web|descending from a silk thread|ambushing from shadows with legs splayed|crouched low ready to pounce|standing on eight legs}, {front view|three-quarter view|top-down view}, multiple glowing eyes clustered, hairy chitinous legs, dripping fangs, NOT humanoid, NOT bipedal, eight legs only",
+        "negative_prompt": "humanoid stance, bipedal pose, two legs, four legs, arms, hands, person, drider, arachne, spider-woman, anthropomorphic spider, beast-man, face on body, human face, demon, swarm of spiders"
     },
     "Kobold": {
+        "category": "humanoid_small",
         "prompt": "A small reptilian kobold warrior, {scouting with a flickering torch|hiding behind dungeon debris|brandishing a crude spear}, animalistic features, lizard-like skin",
         "negative_prompt": "human, beautiful, tall, static pose"
     },
     "Goblin": {
+        "category": "humanoid_small",
         "prompt": "A small malevolent green-skinned goblin, {front view|three-quarter view|side profile}, {sneaking with a jagged dagger|cackling while pointing|skulking in dungeon shadows|clutching a stolen gemstone|aiming a poisoned shortbow|swinging a stolen mace|looking up and cackling}, pointed ears, snarling with sharp teeth",
         "negative_prompt": "human, beautiful, tall, static pose, barrel, box"
     },
     "Ogre": {
+        "category": "humanoid_large",
         "prompt": "A massive muscular ogre brute, {roaring and lunging|club raised high|imposing predatory walk}, thick hide, intimidating size, single horn",
         "negative_prompt": "humanoid, person, weak, small, static pose"
     },
     "Vampire": {
+        "category": "humanoid_large",
         "prompt": "A dark vampire lord, {wrapped in a voluminous dark cape|seated on a gothic throne|hovering above the floor}, pale skin, piercing red eyes, refined aristocratic attire",
         "negative_prompt": "animal, beast, sunlight, tan skin, human, static pose"
     },
     "Demon": {
+        "category": "humanoid_large",
         "prompt": "An infernal demon warrior, {three-quarter view|side profile|dynamic action pose}, {menacing crouch|spreading wings|clenched fists}, {jagged horns|curled demonic horns}, {tattered dark cape|clashing iron chains}, glowing eyes, surrounding hellfire aura",
         "negative_prompt": "angel, holy, human, person, simple front view, static pose, mugshot style"
     },
     "Ghost": {
+        "category": "incorporeal",
         "prompt": "A translucent ethereal ghost apparition, {whispering and reaching out|passing through stone walls|flowing wispy form}, glowing mist, floating",
         "negative_prompt": "solid, physical, flesh, bone, humanoid, person, static pose"
     },
     "Hydra": {
+        "category": "serpentine",
         "prompt": "A multi-headed hydra beast, {multiple necks snapping and hissing|all heads facing different directions|coiled serpentine body}, dripping venom, reptilian scales",
         "negative_prompt": "humanoid, person, arms, legs, static pose"
     },
     "Manticore": {
+        "category": "winged_reptilian",
         "prompt": "A winged manticore predator, {leaping with claws extended|soaring with bat wings|scorpion tail poised to strike}, lion body",
         "negative_prompt": "humanoid, person, static pose"
     },
     "Medusa": {
+        "category": "humanoid_large",
         "prompt": "(A full body study of a hybrid monster:1.3) in a (dynamic s-curve pose:1.1), (beautiful young woman's face with an alluring and seductive gaze:1.2), {refined facial details|clear youthful features|smooth facial contour}, (bewitching and powerful gorgon beauty:1.1) with writhing snakes for hair, {chest area completely protected by elegant form-fitting bronze and leather plating:1.3}, (sensual serpentine body with reptilian scales coiled on floor:1.2), petrifying gaze, wearing stone armor and mystical layered silk wraps, ominous and captivating presence",
         "negative_prompt": "animal, beast, bird head, snake head, mask, face plate, metallic face, porcelain skin, stiff face, plastic texture, closeup, portrait, headshot, cute, nudity, bare skin, exposed chest, nipples, (topless, naked breasts:1.5), man, male, warrior, weak, fragile, static pose"
     },
     "Gargoyle": {
+        "category": "construct_stone",
         "prompt": "A stone-skinned winged gargoyle sentinel, {perched on a gothic pedestal|frozen in statue pose|spreading stony wings}, rocky texture",
         "negative_prompt": "flesh, skin, soft, flexible, human, humanoid, person, active movement"
     },
     "Lich": {
+        "category": "humanoid_large",
         "prompt": "An ancient skeletal lich necromancer, {casting a dark spell|levitating above bone pile|clutching an ancient grimoire}, tattered decayed cloth",
         "negative_prompt": "living, healthy skin, youthful, human, static pose"
     },
     "Mimic": {
+        "category": "construct_object",
         "prompt": "A living mimic chest monster, {lid wide open with sharp teeth|disguised as a common wooden chest|sticky tongue lashing out}, wooden texture",
         "negative_prompt": "humanoid, person, legs, arms, static pose"
     },
     "Wolf": {
-        "prompt": "A savage giant wolf, {howling to the moon|leaping in attack|low predatory prowl}, bristling fur, snarling teeth",
-        "negative_prompt": "humanoid, person, dog, domestic, static pose"
+        "category": "quadruped_large",
+        "prompt": "(a savage giant wolf, large four-legged canine predator:1.5), (typical wolf anatomy with elongated muzzle, pointed ears, four powerful legs, bushy tail:1.3), (large canine quadruped body covered in thick bristling fur:1.3), {howling with head raised on four legs|leaping in attack with paws extended|in low predatory prowl on four legs|standing alert with ears pricked|baring fangs in a snarl}, {front view|three-quarter view|side profile}, snarling teeth, sharp claws on four paws, glowing intense eyes, NOT humanoid, NOT bipedal",
+        "negative_prompt": "humanoid stance, bipedal pose, walking on two legs, standing upright, muscular humanoid body, werewolf, werecreature, lycanthrope, wolfman, anthropomorphic, person, dog, domestic pet, swarm, multiple creatures, demon, beast-man"
     },
     "Ghoul": {
+        "category": "humanoid_small",
         "prompt": "A feral gaunt undead creature, {hiding in a grave|feasting on remains|twitching erratic pose}, pale stretched skin, necrotic aura",
         "negative_prompt": "human, person, healthy, fat, static pose"
     },
     "Giant Worm": {
+        "category": "tubular",
         "prompt": "A massive earthworm-like monster with a thick tubular fleshy body, {coiled into a dense spiral mound on the stone floor|spiraling into a circular pile}, pinkish-grey segmented skin, {glistening with slime|wet slimy texture}, circular mouth with rows of teeth, slithering in place",
         "negative_prompt": "humanoid, person, bird, legs, static pose, face only, wall, emerging from wall, thin body, skinny, stretched out, armored, robotic"
     },
     "Chimera": {
+        "category": "winged_reptilian",
         "prompt": "A grotesque chimeric beast with {heads of a lion, goat, and snake|lion head roaring while snake tail strikes}, leathery bat wings, muscular body",
         "negative_prompt": "humanoid, person, small, cute, static pose"
     },
     "Flesh Golem": {
+        "category": "humanoid_large",
         "prompt": "A hulking construct of stitched muscle, {heavy shuffling gait|stitches pulling apart|electrified aura}, glowing necrotic energy",
         "negative_prompt": "human, natural, robotic, static pose"
     },
     "Harpy": {
+        "category": "humanoid_small",
         "prompt": "(A full body shot of a hybrid monster:1.3) in a (dynamic and seductive s-curve pose:1.2), (beautiful young woman's face with an alluring femme fatale gaze:1.2), {refined facial details|clear youthful features|smooth facial contour}, (bewitching yet elegant predator:1.1), {massive bird wings instead of arms|large wings attached to shoulders}, {chest and torso protected by elegant form-fitting silver armor plates and layered silk rags:1.3}, (lower body of a bird with powerful talons standing on ruins:1.2), seductive and ominous presence",
         "negative_prompt": "mask, face plate, metallic face, porcelain skin, stiff face, plastic texture, closeup, portrait, headshot, exposed breasts, nipples, bare skin, (topless, naked breasts:1.5), man, male, bird head, beak, avian face, animal face, bird torso, feathers on face, purely animal, cute, purely human, weak, fragile, static pose"
     },
     "Wraith": {
+        "category": "incorporeal",
         "prompt": "A spectral figure, {fading in and out of shadows|raising a cold scythe|wispy trailing robes}, no face but glowing eyes, floating shadow",
         "negative_prompt": "solid, physical, flesh, bone, bright color, humanoid, person, static pose"
     },
     "Cerberus": {
+        "category": "quadruped_large",
         "prompt": "A massive monstrous hound with three distinct canine heads, {all heads snarling|guarding the gates of hell|full body visible in low stance}, powerful muscular build, thick black fur",
         "negative_prompt": "humanoid, person, cute, domestic dog, static pose, two heads, one head"
     },

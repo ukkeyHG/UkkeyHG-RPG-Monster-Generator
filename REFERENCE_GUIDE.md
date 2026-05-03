@@ -9,15 +9,88 @@
 
 | スタイル名 | 概要 | 推奨設定 (自動出力) |
 | :--- | :--- | :--- |
-| **Oil Painting** | 重厚な油彩画 | Steps: 30, CFG: 8.0, Sampler: dpmpp_2m |
-| **Cinematic Realistic** | 写実的なリアル | Steps: 35, CFG: 6.5, Sampler: dpmpp_3m_sde_gpu |
-| **Ancient Sketch** | 手書きスケッチ | Steps: 20, CFG: 5.0, Sampler: euler |
-| **Anime Cel Shaded** | アニメ風（セル画） | Steps: 28, CFG: 7.5, Sampler: dpmpp_2m |
-| **Pixel Art** | レトロなドット絵風 | Steps: 25, CFG: 7.0, Sampler: euler |
+| **Oil Painting** | 重厚な油彩画 | Steps: 8, CFG: 2.0, Sampler: dpmpp_sde, Scheduler: karras |
+| **Cinematic Realistic** | 写実的なリアル | Steps: 8, CFG: 1.8, Sampler: dpmpp_sde, Scheduler: karras |
+| **Anime Cel Shaded** | アニメ風（セル画） | Steps: 8, CFG: 2.5, Sampler: dpmpp_sde, Scheduler: karras |
+
+> [!IMPORTANT]
+> 既定値は **DreamShaper XL Lightning DPM++ SDE** 前提でチューニング済みです。Lightning ユーザーは Offset を 0 のまま使えます。標準 SDXL モデルを使う場合は下記の Offset 適用が必要です。
 
 > [!TIP]
 > **アニメ風スタイルをさらに高品質にするには**
 > `Juggernaut XL` などの実写・汎用系モデルでも動作しますが、アニメ専用モデル（例：`Animagine XL`, `Pony Diffusion V6 XL` など）に切り替えると、より本物のアニメに近い、鮮やかな塗りや綺麗な線画が得られます。
+
+---
+
+## 1.5. 推奨モデル（Checkpoint）
+
+このノードのプロンプトは特定のモデルでチューニング・検証されています。下記の Tier 制を参考に選んでください。
+
+> [!IMPORTANT]
+> ### ★ Tier 1: 第一推奨（このノードの基準モデル）
+>
+> | モデル | ファイル名 | 備考 |
+> | :--- | :--- | :--- |
+> | **DreamShaper XL Lightning DPM++ SDE** | `dreamshaperXL_lightningDPMSDE.safetensors` | **本ノードの全プロンプト・全テストの基準モデル**。プロンプトが想定通りに反応する、油彩・スケッチ・写実・アニメすべてに無難に適応 |
+>
+> Civitai: https://civitai.com/models/112902/dreamshaper-xl
+> ファイル配置: `ComfyUI/models/checkpoints/`
+
+### Tier 1 推奨設定（KSampler Offset）
+
+**既定値が Lightning 前提**でチューニング済みなので、Lightning モデル使用時は **`steps_offset = 0` / `cfg_offset = 0`** のままで OK です。
+
+| Style | 既定 Steps | 既定 CFG | 既定 Sampler | 既定 Scheduler |
+| :--- | :---: | :---: | :--- | :--- |
+| Oil Painting | 8 | 2.0 | `dpmpp_sde` | `karras` |
+| Cinematic Realistic | 8 | 1.8 | `dpmpp_sde` | `karras` |
+| Anime Cel Shaded | 8 | 2.5 | `dpmpp_sde` | `karras` |
+
+> [!TIP]
+> 微調整したい場合は `steps_offset` で ±2〜4、`cfg_offset` で ±0.3〜0.5 程度の調整がおすすめです。CFG を 3.0 以上に上げると焼け付きが起きやすくなります。
+
+### ○ Tier 2: 動作確認済みの代替
+
+スタイル特化で Tier 1 を上回る品質が欲しい場合の代替候補。プロンプトはほぼそのまま動きますが、若干のチューニングが必要なことがあります。
+
+| モデル | 得意なスタイル | 備考 |
+| :--- | :--- | :--- |
+| **AlbedoBase XL** | 全般 | 中立で癖が少ない。Lightning 不要なら標準ステップ（25〜35）で動作 |
+| **RealVisXL V5.0** | Cinematic Realistic | 写実モンスター画の最高峰、subsurface scattering が綺麗 |
+| **Illustrious XL v1.0** | Anime Cel Shaded | アニメ調モンスター。プロンプト先頭に `masterpiece, best quality` 追加推奨 |
+
+### ⚠ Tier 3: 動作するが要注意（学習バイアス強）
+
+これらのモデルは動作しますが、本ノードのプロンプトと**衝突するバイアス**を持っています。
+
+| モデル | バイアス傾向 | 顕在化する問題 |
+| :--- | :--- | :--- |
+| `Juggernaut XL` 系 | 悪魔・暗黒方面に強い | コウモリ→悪魔・骸骨→Death Knight・狼→人狼 |
+| `NightVision XL` | ダーク方面に強い | Light / 神聖系の表現が出にくい |
+
+回避策: Tier 1（DreamShaper XL Lightning）に切り替える。プロンプトのウェイトを上げても完全には抑制できない。
+
+### × Tier 4: 非推奨（動作未保証）
+
+下記モデル系統は本ノードのプロンプト構造と噛み合わないため、動作保証外:
+
+| モデル系統 | 理由 |
+| :--- | :--- |
+| **SD 1.5 系**（Realistic Vision など） | プロンプト長と重み構文が SDXL 前提のため、品質低下・崩壊しやすい |
+| **Pony Diffusion V6 XL** | プロンプト先頭に `score_9, score_8_up, score_7_up...` が必須で、本ノードと共存させるには大幅改造が必要 |
+| **FLUX.1 / SD 3.5 / HiDream** | プロンプトの解釈方式が違う（自然言語寄り）。本ノードの `(...:1.5)` ウェイトや variant 構文 `{a|b|c}` が正しく解釈されない可能性 |
+
+### VRAM 別の現実解（参考）
+
+| VRAM | 推奨セットアップ |
+| :--- | :--- |
+| **8GB** | Tier 1（DreamShaper XL Lightning、Steps 8〜12） ※ 本ノードの想定環境 |
+| **12GB** | Tier 1 または Tier 2（標準ステップ 25〜35） |
+| **16GB+** | Tier 1/2 + ControlNet / IP-Adapter 併用可 |
+
+> [!TIP]
+> **動物系種族（Bat / Rat / Wolf など）が悪魔化する場合**
+> Tier 3 の `Juggernaut XL` 系を使っていないか確認。Tier 1（DreamShaper XL Lightning）に切り替えると改善します。
 
 ---
 
@@ -35,8 +108,24 @@
 
 ### 推奨値の微調整（Offset機能）
 `KSampler` に設定値を繋ぐと、サンプラー側での直接操作ができなくなります。その代わりに、当ノードの **`steps_offset`** と **`cfg_offset`** を操作することで、推奨値を基準に数値を微調整できます。
-- **steps_offset**: スタイルの基本ステップに追加・削減する値（例：`-5` で 5 ステップ減らす）。
-- **cfg_offset**: 基本 CFG に加算・減算する値（例：`1.5` で 1.5 上げる）。
+- **steps_offset**: スタイルの基本ステップに追加・削減する値（範囲: `-30 〜 +30`、例：`-5` で 5 ステップ減らす）。
+- **cfg_offset**: 基本 CFG に加算・減算する値（範囲: `-10.0 〜 +10.0`、例：`1.5` で 1.5 上げる）。
+
+> [!NOTE]
+> **本ノードの既定値は Lightning モデル (DreamShaper XL Lightning DPM++ SDE) 前提です。**
+> Lightning ユーザーは Offset 不要、`steps_offset = 0 / cfg_offset = 0` のまま使えます。
+
+> [!IMPORTANT]
+> **標準 SDXL モデル（非 Lightning）を使う場合の Offset 設定**
+> Lightning ではない通常の SDXL モデル（`SDXL Base`, `Juggernaut XL` 通常版等）は、Lightning より多くの Steps と高い CFG が必要です。以下の Offset を加算してください:
+>
+> | Style | 既定 Steps | 既定 CFG | 推奨 steps_offset | 推奨 cfg_offset | 結果 (Steps / CFG) |
+> | :--- | :---: | :---: | :---: | :---: | :--- |
+> | Oil Painting | 8 | 2.0 | `+22` | `+6.0` | 30 / 8.0 |
+> | Cinematic Realistic | 8 | 1.8 | `+27` | `+4.7` | 35 / 6.5 |
+> | Anime Cel Shaded | 8 | 2.5 | `+20` | `+5.0` | 28 / 7.5 |
+>
+> Sampler / Scheduler は本ノードからの出力を使うか、KSampler 側で `dpmpp_2m / karras` を直接指定してください（Lightning 用 `dpmpp_sde` は標準モデルでも動作はしますが最適ではありません）。
 
 ## 2. Species (種族)
 モンスターの基本的な外見を決定します。現在、以下の全28種族が選択可能です。
@@ -96,36 +185,47 @@
 - **Light**: 聖なる黄金の輝き、神々しい光の粒。
 - **Metal**: 鏡面仕上げのメタリックな質感、クローム。
 
+> [!NOTE]
+> ### 属性エフェクトの「領域汚染」について
+>
+> SDXL モデルの学習データには「**属性付きクリーチャーは周囲環境も影響を受ける**」というバイアスが含まれています。そのため、Element を強く適用すると **モンスター本体だけでなく床や壁にも属性エフェクトが広がる**ことがあります。
+>
+> 例:
+> - **Ice**: 床に氷塊・霜の patches が散らばる
+> - **Fire**: 床に焚火・燃え滓が散らばる
+> - **Lightning**: 床にスパーク・電光跡が残る
+> - **Dark**: 床に影の水たまりが広がる
+> - **Light**: 床に光のパッチが現れる
+>
+> これは ComfyUI の ControlNet を使っても完全には抑えきれない**仕様**です。
+>
+> **RPG 的な解釈としてはむしろ自然**で、「Ice 属性のボスの周囲は凍りつく」「Fire 属性のクリーチャーが立つ場所は焼け焦げる」といった **Element Domain（属性領域効果）** として捉えると、ゲームのアートワークとして違和感ありません。
+>
+> 完全に背景をクリーンにしたい場合は、生成後に画像編集ソフトで該当部分を消すか、Inpainting ワークフローで再描画してください。
+
 ---
 
-## 4. Variant (変異・個体差)
-モンスターの「状態」や「個体としての特徴」を決定します。
+## 4. Rank (強さ・希少度・個性)
+モンスターの迫力・装飾・特殊な個性を一括で決定します。
+旧 `Variant` から `Ancient` / `Mutated` を統合しました。
 
-- **Normal**: 標準的な個体。
-- **Enraged**: 怒り狂った状態。血管の隆起や攻撃的なポーズ。
-- **Ancient**: 長い年月を経た個体。体毛や岩肌に苔が生え、風化している。
-- **Mutated**: 突然変異。不規則な結晶や棘が体から生えている。
-
-> [!TIP]
-> **「Style: Ancient Sketch」と「Variant: Ancient」の違い**
-> - **Style: Ancient Sketch** は「古いスケッチという**描き方**」です。
-> - **Variant: Ancient** は「モンスターが**長生きしている**」という設定です。
-> 両方を組み合わせると、「古文書に記された古の化け物」という非常に雰囲気のある画像になります。
-
----
-
-## 5. Rank (強さ・希少度)
-モンスターの迫力や装飾の豪華さを決定します。
-
+### 強さ・希少度（4 段階）
 - **Common**: 一般的な個体。標準的な外見で装飾も控えめ。
-- **Elite**: 強力な個体。鉄や青銅の装具を纏い、歴戦の凄みがある。
+- **Elite**: 強力な個体。歴戦の凄みと鉄・青銅の装飾、わずかに大型化。
 - **Boss**: 強大で威厳のある個体。圧倒的巨体と周囲に漂うオーラ、地響きを感じる存在感。
 - **Legendary**: 神話の如き最高位。黄金に輝く装飾、神々しい粒子を纏った究極の造形。
 
+### 特殊個性（2 種）
+- **Ancient**: 長い年月を経た古代個体。体表に苔や塵、風化した質感、古の威厳。
+- **Mutated**: 異常変異した個体。不規則な結晶・棘・腫瘍状の異形、膨らんだ血管、対称性の崩れ。
+
+> [!TIP]
+> **Rank: Ancient の使い所**
+> 風化した古代個体を表現したい場合に選択。Scene を `Graveyard` などにすると「古代の墓守」的な雰囲気が出ます。
 
 ---
 
-## 6. Scene (背景・場所)
+## 5. Scene (背景・場所)
 モンスターが出現する場所（背景）を決定します。
 
 - **Dungeon**: 暗い石造りの地下牢。鉄格子のある冷たい部屋。
@@ -143,5 +243,5 @@
 
 ## 組み合わせのコツ
 - **リアルにしたい**: `Cinematic Realistic` を選び、KSampler の CFG を少し下げてください。
-- **研究資料風**: `Ancient Sketch` と `Scene: Graveyard` や `Variant: Ancient` を組み合わせるのがおすすめです。
+- **古代の威厳**: `Rank: Ancient` と `Scene: Graveyard` を組み合わせると、忘れ去られた古代モンスターの雰囲気が出ます。
 - **属性の視認性を高める**: `Element: Fire` や `Lightning` を選んだ際は、少し暗い `Scene` を選ぶと光が映えます。
