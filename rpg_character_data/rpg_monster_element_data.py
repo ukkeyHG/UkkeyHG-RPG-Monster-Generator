@@ -27,7 +27,7 @@ MONSTER_ELEMENT_DATA = {
         "negative_prompt": ""
     },
     "Fire": {
-        "prompt": "(creature's entire fur, skin, and body deeply colored crimson red:1.4), (the creature's body completely engulfed and wrapped in burning flames on the body only:1.4), (every surface of the body deeply tinted fiery red and ember orange:1.3), glowing red-hot skin with molten cracks across the body, smoldering crimson glow on every inch of the creature, heat haze rising from the body itself",
+        "prompt": "(creature's entire fur, skin, and body tinted with crimson red and ember orange highlights:1.2), (the creature's body wrapped in burning flames on the body only:1.3), (surfaces of the body tinted with fiery red and ember orange:1.2), glowing red-hot accents with molten cracks across the body, heat haze rising from the body itself",
         "negative_prompt": "icicles, frost coating, snow on creature, freezing breath, natural brown fur, natural gray fur, fire on the ground only, campfire on floor, embers scattered on the floor, lava puddles on the ground, fire pits on the floor, flames coming from the ground, fire spreading from the body to the floor, flame trails on the dungeon floor, fire growing on the walls, outdoor volcanic landscape, lava field background, burning forest outside, outdoor wildfire scene, scene replaced by lava environment"
     },
     "Ice": {
