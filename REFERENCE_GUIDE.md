@@ -55,8 +55,9 @@
 
 | モデル | 得意なスタイル | 備考 |
 | :--- | :--- | :--- |
-| **AlbedoBase XL** | 全般 | 中立で癖が少ない。Lightning 不要なら標準ステップ（25〜35）で動作 |
-| **RealVisXL V5.0** | Cinematic Realistic | 写実モンスター画の最高峰、subsurface scattering が綺麗 |
+| **AlbedoBase XL v3.1** | 全般 | 中立で癖が少ない。ファンタジー絵画 + 写実のハイブリッド。Lightning 不要なら標準ステップ（25〜35）で動作 |
+| **Copax TimeLessXL v13** | Oil Painting | 古典絵画調・濃密な色彩・伝説級ボスの重厚感。標準ステップ（25〜35）必須 |
+| **RealVisXL V5.0** | Cinematic Realistic | 写実モンスター画の最高峰、subsurface scattering が綺麗。NPC ポートレート（人間キャラ）にも最適 |
 | **Illustrious XL v1.0** | Anime Cel Shaded | アニメ調モンスター。プロンプト先頭に `masterpiece, best quality` 追加推奨 |
 
 ### ⚠ Tier 3: 動作するが要注意（学習バイアス強）
@@ -91,6 +92,29 @@
 > [!TIP]
 > **動物系種族（Bat / Rat / Wolf など）が悪魔化する場合**
 > Tier 3 の `Juggernaut XL` 系を使っていないか確認。Tier 1（DreamShaper XL Lightning）に切り替えると改善します。
+
+### 用途別おすすめ（ウィザードリィ風 RPG・古典 D&D 風 RPG 制作向け）
+
+ゲーム素材としてキャラ・モンスター・NPC・装備を一貫して作る場合の組み合わせ:
+
+| 用途 | おすすめモデル | 本ノード style | 理由 |
+| :--- | :--- | :--- | :--- |
+| **モンスター全般（推奨）** | DreamShaper XL Lightning | Oil Painting / Cinematic | 悪魔化バイアスなし、絵画寄りでウィザードリィの雰囲気と相性◎、Lightning で量産しやすい |
+| **重厚ボス・伝説級モンスター** | Copax TimeLessXL v13 | Oil Painting | 古典絵画の濃密な色彩、Boss/Legendary ランクの威厳がより出る |
+| **人間 NPC（仲間・酒場主・商人など）** | RealVisXL V5.0 | Cinematic Realistic | 人間ポートレートの写実度が圧倒的、肌・布・金属の質感が綺麗 |
+
+**統一感を最優先する場合**: DreamShaper XL Lightning **単体**で十分な仕上がりになります（本ノードはこれ前提でチューニング済み）。
+
+**ウィザードリィ向きとして避けるべきモデル**:
+- ❌ Pony Diffusion / Animagine XL — アニメ偏向で硬派なウィザードリィのトーンが消える
+- ❌ Juggernaut XL Ragnarok — モンスターが悪魔化（Skeleton → Death Knight、Bat → 悪魔コウモリ）
+- ⚠️ EpicRealism XL — 過度に写実的でゲームアート感がない
+
+> [!NOTE]
+> **モデル切替時の注意**:
+> - SDXL 系モデル間では本ノードのプロンプト構文（`(text:1.5)` ウェイト、`{a|b|c}` バリアント）はそのまま動作
+> - ただしバイアスが違うため、Common/Boss の見え方が微妙に変わる
+> - Lightning 以外は `steps_offset` / `cfg_offset` を Tier 1 表通りに加算する
 
 ---
 
@@ -163,7 +187,7 @@
 
 | 種族名 | 特徴・プロンプトの狙い |
 | :--- | :--- |
-| **Dragon** | 巨体と巨大な翼を強調。雷（Lightning）属性時でも翼が消えないようプロンプトを固定。 |
+| **Dragon** | 4 本足の古典西洋ドラゴン。Common（無装飾・地味色）→ Elite（戦傷・隻眼）→ Boss（角の王冠・背骨スパイク・胸ブレス）→ Legendary（金鱗全身・後光・神聖ルーン）→ Ancient（全身苔・色褪せ）→ Mutated（双頭・余分翼・腫瘍）の進化階段が明確。**ControlNet 使用時はフラット壁参照画像を必ず使う**（縦コリドー参照だと二足立ち化する）。5 本足が稀に出るが SDXL の四足獣描画限界として許容、batch 複数生成で当たりを選ぶ運用。 |
 | **Giant Worm** | 床の上でミミズのようにグルグルと巻いた「とぐろ（spiral mound）」の造形を重視。 |
 | **Harpy** | 優美な人面・しなやかなS字ポーズ・女性の上半身と鳥の翼・足を両立。体にフィットする装甲（form-fitting armor）で色香と安全性を維持。 |
 | **Medusa** | 魅惑的な美貌と威圧感を両立。S字の曲線美を強調した構図と、露出を抑えた豪華な装甲デザインを採用。 |
